@@ -1,23 +1,24 @@
 import numpy as np
+import math
 
 def f(x):
-    return 1 / x
+    return math.sin(x)
 
-def simpson13(f, x):
-    n = len(x)
-    if (n - 1) % 2 != 0:
-        raise ValueError("Simpson's 1/3 rule requirees an even no. of intervals (odd no. of points).")
+def simpson13(f, a, b, n):
+    if n % 2 != 0:
+        raise ValueError("Simpson's 1/3 rule requirees an even no. of intervals.")
 
-    h = x[1] - x[0]
-
+    h = (b - a) / n
+    x = [a + i * h for i in range(n + 1)]
     y = [f(xi) for xi in x]
 
-    sumOdd = sum(y[i]  for i in range(1,  n-1, 2))
-    sumEven = sum(y[i] for i in range(2, n-2, 2))
+    sumOdds = sum(y[i] for i in range(1, n, 2))
+    sumEvens = sum(y[i] for i in range(2, n, 2))
 
-    result = (h/3) * (y[0] + y[-1] + 4 * sumOdd + 2 * sumEven)
-    return result
+    return (h / 3) * (y[0] + y[-1] + 4 * sumOdds + 2 * sumEvens)
 
-x = np.array([16, 19, 21, 22, 20, 17, 13, 11, 9])
-ans = simpson13(f, x)
+a = float(input("a: "))
+b = float(input("b: "))
+n = int(input("n: "))
+ans = simpson13(f, a, b, n)
 print(f"Ans = {ans}")
